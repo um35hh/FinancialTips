@@ -1,0 +1,135 @@
+﻿@page "/preferences/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+
+<h3 class="card-title">Customer Preference </h3>
+
+<br />
+
+@if (Preferences == null)
+{
+    <div class="alert alert-info">Loading Preferences...</div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Investment Amount</th>
+                <th>Actions</th>
+                <th>Risk (in %)</th>
+                <th>Actions</th>
+                <th>Commitment Period</th>
+                <th>Actions</th>
+                <th>Average Income</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var preference in Preferences)
+            {
+            <tr>
+                <td>@preference.InvestAmount</td>
+                <td>
+                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+
+
+
+
+
+                <td>@preference.RiskMinMax</td>
+                <td>
+                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+
+
+
+
+                <td>@preference.CommitmentPeriod</td>
+                <td>
+                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+
+
+
+
+
+
+                <td>@preference.AverageIncome</td>
+                <td>
+                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+
+
+            </tr>
+
+            }
+
+            
+        </tbody>
+
+    </table>
+
+}
+
+
+@code {
+
+    private List<Preference> Preferences;
+    protected async override Task OnInitializedAsync()
+    {
+        Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
+    }
+    async Task Delete(int preferenceId)
+    {
+        var preference = Preferences.First(q => q.Id == preferenceId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {preference.InvestAmount}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.PreferencesEndpoint}/{preferenceId}");
+            await OnInitializedAsync();
+        }
+
+    }
+
+}

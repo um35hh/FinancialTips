@@ -26,8 +26,8 @@ namespace FinancialTips.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetConsultations()
         {
-            var makes = await _unitOfWork.Consultations.GetAll();
-            return Ok(makes);
+            var Consultations = await _unitOfWork.Consultations.GetAll(includes: q => q.Include(x =>x.Plan).Include(x => x.Customer));
+            return Ok(Consultations);
         }
 
         // GET: api/Consultations/5
@@ -112,8 +112,8 @@ namespace FinancialTips.Server.Controllers
         //private bool ConsultationExists(int id)
         private async Task<bool> ConsultationExists(int id)
         {
-            var make = await _unitOfWork.Consultations.Get(q => q.Id == id);
-            return make != null;
+            var Consultation = await _unitOfWork.Consultations.Get(q => q.Id == id);
+            return Consultation != null;
         }
     }
 }

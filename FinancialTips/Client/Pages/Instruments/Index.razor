@@ -1,0 +1,70 @@
+﻿@page "/instruments/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+
+<h3 class="card-title">Instrument Types</h3>
+
+<br />
+
+@if (Instruments == null)
+{
+<div class="alert alert-info">Loading Instruments...</div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Instrument Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var instrument in Instruments)
+            {
+                <tr>
+                    <td>@instrument.InstrumentName</td>
+                    <td>
+                        <a href="/instruments/view/@instrument.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+
+                        <a href="/instruments/edit/@instrument.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(instrument.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+}
+
+
+@code {
+
+    private List<Instrument> Instruments;
+    protected async override Task OnInitializedAsync()
+    {
+        Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+    }
+    async Task Delete(int instrumentId)
+    {
+        var instrument = Instruments.First(q => q.Id == instrumentId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {instrument.InstrumentName}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.InstrumentsEndpoint}/{instrumentId}");
+            await OnInitializedAsync();
+        }
+
+    }
+
+}

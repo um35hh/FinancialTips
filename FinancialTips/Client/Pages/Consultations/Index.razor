@@ -1,0 +1,63 @@
+﻿@page "/consultations/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h3 class="card-title">Financial consultations</h3>
+<br />
+
+@if (consultations == null)
+{
+
+    <div class="alert alert-info">Loading consultations...</div>
+
+}
+else
+
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Consultation Date</th>
+                <th>Consultation Report</th>
+                
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var consultation in consultations)
+            {
+                <tr>
+                    <td>@consultation.Customer.CustName</td>
+                    <td>@consultation.Plan.PlanName </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+}
+}
+
+
+@code {
+
+    private List<Consultation> consultations;
+    protected async override Task OnInitializedAsync()
+    {
+        consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
+    }
+    async Task Delete(int consultationId)
+    {
+        var consultation = consultations.First(q => q.Id == consultationId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {consultation.ConsultDate}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.ConsultationsEndpoint}/{consultationId}");
+            await OnInitializedAsync();
+        }
+
+    }
+
+
+}

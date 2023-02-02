@@ -1,0 +1,66 @@
+﻿@page "/plans/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h3 class="card-title">Financial Plans</h3>
+<br />
+
+@if (plans == null)
+{
+
+    <div class="alert alert-info">Loading Plans...</div>
+
+}
+else
+
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Period</th>
+                <th>R.O.I</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var plan in plans)
+            {
+            <tr>
+                <td>@plan.Instrument.InstrumentName</td>
+                <td>@plan.Preference.InvestAmount</td>
+                <td>@plan.PlanName</td>
+                <td>@plan.PlanPeriod</td>
+                <td>@plan.AverageROI </td>
+            </tr>
+            }
+        </tbody>
+
+    </table>
+
+}
+}
+
+
+@code {
+
+    private List<Plan> plans;
+    protected async override Task OnInitializedAsync()
+    {
+        plans = await _client.GetFromJsonAsync<List<Plan>>($"{Endpoints.PlansEndpoint}");
+    }
+    async Task Delete(int planId)
+    {
+        var plan = plans.First(q => q.Id == planId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {plan.PlanName}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.PlansEndpoint}/{planId}");
+            await OnInitializedAsync();
+        }
+
+    }
+
+
+}
