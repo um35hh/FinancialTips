@@ -3,14 +3,13 @@
 @inject IJSRuntime js
 @attribute [Authorize]
 
-
-<h3 class="card-title">Instrument Types</h3>
+<center><h3 class="card-title">Instrument Types</h3></center>
 
 <br />
 
 @if (Instruments == null)
 {
-<div class="alert alert-info">Loading Instruments...</div>
+    <div class="alert alert-info">Loading Instruments...</div>
 }
 else
 {

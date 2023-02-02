@@ -4,7 +4,7 @@
 @attribute [Authorize]
 
 
-<h3 class="card-title">Customer Preference </h3>
+<center><h3 class="card-title">Customer Preference </h3></center>
 
 <br />
 
@@ -31,81 +31,81 @@ else
 
             @foreach (var preference in Preferences)
             {
-            <tr>
-                <td>@preference.InvestAmount</td>
-                <td>
-                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
+                <tr>
+                    <td>@preference.InvestAmount</td>
+                    <td>
+                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
 
-                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-
-
-
-
-
-                <td>@preference.RiskMinMax</td>
-                <td>
-                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-
-                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-
-
-
-
-                <td>@preference.CommitmentPeriod</td>
-                <td>
-                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-
-                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
+                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
 
 
 
 
 
+                    <td>@preference.RiskMinMax</td>
+                    <td>
+                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
 
-                <td>@preference.AverageIncome</td>
-                <td>
-                    <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-
-                    <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
+                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
 
 
-            </tr>
+
+
+                    <td>@preference.CommitmentPeriod</td>
+                    <td>
+                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+
+                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+
+
+
+
+
+
+                    <td>@preference.AverageIncome</td>
+                    <td>
+                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
+
+                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+
+
+                </tr>
 
             }
 
-            
+
         </tbody>
 
     </table>

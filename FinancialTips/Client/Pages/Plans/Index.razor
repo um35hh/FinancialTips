@@ -3,8 +3,9 @@
 @inject IJSRuntime js
 @attribute [Authorize]
 
-<h3 class="card-title">Financial Plans</h3>
-<img src="/Images/plan2.jpg" asp-append-version="true" width="100px" height="100px" />
+
+<center><h3 class="card-title">Financial Plans</h3></center>
+<center><img src="/Images/plan2.jpg" asp-append-version="true" width="100px" height="100px" /></center>
 <br />
 
 @if (plans == null)
@@ -22,26 +23,26 @@ else
                 <th>Name</th>
                 <th>Period</th>
                 <th>R.O.I</th>
-                
+
             </tr>
         </thead>
         <tbody>
             @foreach (var plan in plans)
             {
-            <tr>
-                <td>@plan.Instrument.InstrumentName</td>
-                <td>@plan.Preference.InvestAmount</td>
-                <td>@plan.PlanName</td>
-                <td>@plan.PlanPeriod</td>
-                <td>@plan.AverageROI </td>
-            </tr>
+                <tr>
+                    <td>@plan.Instrument.InstrumentName</td>
+                    <td>@plan.Preference.InvestAmount</td>
+                    <td>@plan.PlanName</td>
+                    <td>@plan.PlanPeriod</td>
+                    <td>@plan.AverageROI </td>
+                </tr>
             }
         </tbody>
 
     </table>
 
 }
-}
+
 
 
 @code {
