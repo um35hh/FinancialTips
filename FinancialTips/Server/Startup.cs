@@ -1,5 +1,7 @@
 using FinancialTips.Server.Data;
+using FinancialTips.Server.IRepository;
 using FinancialTips.Server.Models;
+using FinancialTips.Server.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +45,8 @@ namespace FinancialTips.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
