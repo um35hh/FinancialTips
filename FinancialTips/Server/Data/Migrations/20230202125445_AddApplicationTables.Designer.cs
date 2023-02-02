@@ -4,14 +4,16 @@ using FinancialTips.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinancialTips.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230202125445_AddApplicationTables")]
+    partial class AddApplicationTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,26 +90,6 @@ namespace FinancialTips.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "59332dee-bc1c-42eb-ab1b-4e481e0a3dd6",
-                            Email = "admin@localhost.com",
-                            EmailConfirmed = false,
-                            FirstName = "Admin",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHCqKuuzEVVgNJSnomQph5gbV7L0MWoWMckTBwxfKebifQDlKFCojyoyiFk9RZgkBQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "e6c86706-0354-434f-806e-35f90508673d",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("FinancialTips.Shared.Domain.Consultation", b =>
@@ -214,53 +196,6 @@ namespace FinancialTips.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Instruments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 529, DateTimeKind.Local).AddTicks(330),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(1905),
-                            InstrumentName = "Equity",
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2567),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2571),
-                            InstrumentName = "Futures",
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2573),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2574),
-                            InstrumentName = "Options",
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2575),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2576),
-                            InstrumentName = "Commodities",
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2578),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 530, DateTimeKind.Local).AddTicks(2579),
-                            InstrumentName = "Cryptocurrency",
-                            UpdatedBy = "System"
-                        });
                 });
 
             modelBuilder.Entity("FinancialTips.Shared.Domain.Plan", b =>
@@ -348,68 +283,6 @@ namespace FinancialTips.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Preferences");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AverageIncome = 4750000,
-                            CommitmentPeriod = 36,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5888),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5903),
-                            InvestAmount = 10000,
-                            RiskMinMax = 30,
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AverageIncome = 1750000,
-                            CommitmentPeriod = 6,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5906),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5907),
-                            InvestAmount = 350000,
-                            RiskMinMax = 50,
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AverageIncome = 6750000,
-                            CommitmentPeriod = 3,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5909),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5910),
-                            InvestAmount = 670000,
-                            RiskMinMax = 60,
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AverageIncome = 3750000,
-                            CommitmentPeriod = 7,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5912),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5913),
-                            InvestAmount = 550000,
-                            RiskMinMax = 40,
-                            UpdatedBy = "System"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AverageIncome = 1100000,
-                            CommitmentPeriod = 10,
-                            CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5915),
-                            DateUpdated = new DateTime(2023, 2, 3, 0, 51, 12, 531, DateTimeKind.Local).AddTicks(5916),
-                            InvestAmount = 675000,
-                            RiskMinMax = 70,
-                            UpdatedBy = "System"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -540,22 +413,6 @@ namespace FinancialTips.Server.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
-                            ConcurrencyStamp = "dda8eaf5-3316-4b47-ab14-cae71fcf1c3c",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
-                            ConcurrencyStamp = "bc529af5-cd43-45b3-a1e9-b916da7ddb8c",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -643,13 +500,6 @@ namespace FinancialTips.Server.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "3781efa7-66dc-47f0-860f-e506d04102e4",
-                            RoleId = "ad2bcf0c-20db-474f-8407-5a6b159518ba"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
