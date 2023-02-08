@@ -9,7 +9,7 @@
 
 <a href="/customers/create" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
-    Create New Customer
+    Create New Customers
 </a>
 <br />
 <br />
@@ -40,11 +40,11 @@ else
                 <td>@customer.CustGender</td>
                 <td>@customer.CustContact</td>
                 <td>
-                    <a href="/Customer/view/@customer.Id" class="btn btn-primary">
+                    <a href="/customers/view/@customer.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
 
-                    <a href="/Customer/edit/@customer.Id" class="btn btn-warning">
+                    <a href="/customers/edit/@customer.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(()=>Delete(customer.Id))">
