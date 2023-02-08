@@ -1,0 +1,91 @@
+﻿@page "/consultations/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New consultations</h3>
+<hr />
+<br />
+
+<EditForm Model="@consultation" OnValidSubmit="CreateConsultation">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+
+    <div class="form-group">
+
+
+        <div class="form-group">
+
+            <label>Consult Report: </label>
+            <div>
+                <InputText @bind-Value="consultation.ConsultReport" class="form-control" />
+                <ValidationMessage For="@(()=> consultation.ConsultReport)" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+
+        <div class="form-group">
+
+            <label>Consultation Date: </label>
+            <div>
+                <InputDate @bind-Value="consultation.ConsultDate" class="form-control" />
+                <ValidationMessage For="@(()=> consultation.ConsultDate)" />
+            </div>
+        </div>
+
+    </div>
+
+    @if (consultation.Id > 0)
+    {
+        <div class="form-group">
+            <label>Date In: </label>
+            <div>
+                <InputDate @bind-Value="@consultation.ConsultDate" class="form-control" />
+                <ValidationMessage For="@(() => consultation.ConsultDate)" />
+            </div>
+        </div>
+    }
+
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create consultation
+    </button>
+
+</EditForm>
+
+@code {
+
+    Consultation consultation = new Consultation();
+
+    private IList<Instrument> Instruments;
+    private IList<Consultation> Consultations;
+    private IList<Customer> Customers;
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        //Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+        Consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
+
+        //Colours = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
+
+    }
+
+    private async Task CreateConsultation()
+
+    {
+
+        await _client.PostAsJsonAsync(Endpoints.ConsultationsEndpoint, consultation);
+
+        _navManager.NavigateTo("/consultations/");
+
+    }
+
+}

@@ -1,0 +1,62 @@
+﻿@page "/instruments/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Instruments</h3>
+<hr />
+<br />
+
+<EditForm Model="@instrument" OnValidSubmit="CreateInstrument">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+
+        <div class="form-group">
+
+            <label>Instrument Name</label>
+            <div>
+                <InputText @bind-Value="instrument.InstrumentName" class="form-control" />
+                <ValidationMessage For="@(()=> instrument.InstrumentName)" />
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Instrument
+    </button>
+
+</EditForm>
+
+@code {
+
+    Instrument instrument = new Instrument();
+
+    private IList<Instrument> Instruments;
+    private IList<Preference> Preferences;
+    //private IList<Colour> Colours;
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+        Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
+
+        //Colours = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
+
+    }
+
+    private async Task CreateInstrument()
+
+    {
+
+        await _client.PostAsJsonAsync(Endpoints.InstrumentsEndpoint, instrument);
+
+        _navManager.NavigateTo("/instruments/");
+
+    }
+
+}

@@ -1,0 +1,105 @@
+﻿@page "/preferences/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New preferences</h3>
+<hr />
+<br />
+
+<EditForm Model="@preference" OnValidSubmit="CreatePreference">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+
+        
+        <div class="form-group">
+
+            <label>Investment Amount</label>
+            <div>
+                <InputNumber @bind-Value="preference.InvestAmount" class="form-control" />
+                <ValidationMessage For="@(()=> preference.InvestAmount)" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        
+        <div class="form-group">
+
+            <label>Risk </label>
+            <div>
+                <InputNumber @bind-Value="preference.RiskMinMax" class="form-control" />
+                <ValidationMessage For="@(()=> preference.RiskMinMax)" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        
+        <div class="form-group">
+
+            <label>Commitment Period </label>
+            <div>
+                <InputNumber @bind-Value="preference.CommitmentPeriod" class="form-control" />
+                <ValidationMessage For="@(()=> preference.CommitmentPeriod)" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        
+        <div class="form-group">
+
+            <label>Average Income </label>
+            <div>
+                <InputNumber @bind-Value="preference.AverageIncome" class="form-control" />
+                <ValidationMessage For="@(()=> preference.AverageIncome)" />
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create preference
+    </button>
+
+</EditForm>
+
+@code {
+
+    Preference preference = new Preference();
+
+    private IList<Instrument> Instruments;
+    private IList<Preference> Preferences;
+    //private IList<Customer> Customers;
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        //Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+        Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
+
+        //Colours = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
+
+    }
+
+    private async Task CreatePreference()
+
+    {
+
+        await _client.PostAsJsonAsync(Endpoints.PreferencesEndpoint, preference);
+
+        _navManager.NavigateTo("/preferences/");
+
+    }
+
+}

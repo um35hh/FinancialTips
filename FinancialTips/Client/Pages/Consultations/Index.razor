@@ -7,7 +7,14 @@
 <center><img src="/Images/consult.jpg" asp-append-version="true" width="200px" height="100px" /></center>
 <br />
 
-@if (consultations == null)
+<a href="/consultations/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Consultation
+</a>
+
+
+
+@if (Consultations == null)
 {
 
     <div class="alert alert-info">Loading consultations...</div>
@@ -19,18 +26,30 @@ else
     <table class="table table-responsive">
         <thead>
             <tr>
-                <th>Customer Name</th>
-                <th>Plan</th>
+                <th>Customer Report</th>
+                <th>Consult Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var consultation in consultations)
+            @foreach (var consultation in Consultations)
             {
-                <tr>
-                    <td>@consultation.Customer.CustName</td>
-                    <td>@consultation.Plan.PlanName </td>
-                </tr>
+            <tr>
+                <td>@consultation.ConsultReport</td>
+                <td>@consultation.ConsultDate </td>
+                <td>
+                    <a href="/Consultations/view/@consultation.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Consultations/edit/@consultation.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
             }
         </tbody>
 
@@ -42,14 +61,14 @@ else
 
 @code {
 
-    private List<Consultation> consultations;
+    private List<Consultation> Consultations;
     protected async override Task OnInitializedAsync()
     {
-        consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
+        Consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
     }
     async Task Delete(int consultationId)
     {
-        var consultation = consultations.First(q => q.Id == consultationId);
+        var consultation = Consultations.First(q => q.Id == consultationId);
         var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {consultation.ConsultDate}?");
         if (confirm)
         {

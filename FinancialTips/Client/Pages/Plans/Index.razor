@@ -8,7 +8,14 @@
 <center><img src="/Images/plan2.jpg" asp-append-version="true" width="100px" height="100px" /></center>
 <br />
 
-@if (plans == null)
+<a href="/plans/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Plans
+</a>
+<br />
+<br />
+
+@if (Plans == null)
 {
 
     <div class="alert alert-info">Loading Plans...</div>
@@ -20,22 +27,30 @@ else
     <table class="table table-responsive">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Period</th>
-                <th>R.O.I</th>
-
+                <th>Plan Name</th>
+                <th>Plan Period</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var plan in plans)
+            @foreach (var plan in Plans)
             {
-                <tr>
-                    <td>@plan.Instrument.InstrumentName</td>
-                    <td>@plan.Preference.InvestAmount</td>
-                    <td>@plan.PlanName</td>
-                    <td>@plan.PlanPeriod</td>
-                    <td>@plan.AverageROI </td>
-                </tr>
+            <tr>
+                <td>@plan.PlanName</td>
+                <td>@plan.PlanPeriod</td>
+                <td>
+                    <a href="/Plans/view/@plan.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+
+                    <a href="/Plans/edit/@plan.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(plan.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>               
             }
         </tbody>
 
@@ -47,14 +62,14 @@ else
 
 @code {
 
-    private List<Plan> plans;
+    private List<Plan> Plans;
     protected async override Task OnInitializedAsync()
     {
-        plans = await _client.GetFromJsonAsync<List<Plan>>($"{Endpoints.PlansEndpoint}");
+        Plans = await _client.GetFromJsonAsync<List<Plan>>($"{Endpoints.PlansEndpoint}");
     }
     async Task Delete(int planId)
     {
-        var plan = plans.First(q => q.Id == planId);
+        var plan = Plans.First(q => q.Id == planId);
         var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {plan.PlanName}?");
         if (confirm)
         {

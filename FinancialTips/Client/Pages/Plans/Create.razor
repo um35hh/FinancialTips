@@ -1,0 +1,80 @@
+﻿@page "/plans/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Plans</h3>
+<hr />
+<br />
+
+<EditForm Model="@plan" OnValidSubmit="CreatePlan">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+        <div class="form-group">
+
+            <label> Plan Name </label>
+            <div>
+                <InputText @bind-Value="plan.PlanName" class="form-control" />
+                <ValidationMessage For="@(()=> plan.PlanName)" />
+            </div>
+        </div>
+
+    
+
+    <div class="form-group">
+
+        <label>Plan Period (Months):</label>
+        <div>
+            <InputNumber @bind-Value="plan.PlanPeriod" class="form-control" />
+            <ValidationMessage For="@(()=> plan.PlanPeriod)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label>Expected ROI :</label>
+        <div>
+            <InputNumber @bind-Value="plan.AverageROI" class="form-control" />
+            <ValidationMessage For="@(()=> plan.AverageROI)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create plan
+    </button>
+</EditForm>
+
+@code {
+
+    Plan plan = new Plan();
+
+    private IList<Customer> Customers;
+    private IList<Instrument> Instruments;
+    private IList<Preference> Preferences;
+    private IList<Plan> Plans;
+
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+        Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+
+        Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
+
+    }
+
+    private async Task CreatePlan()
+
+    {
+
+        await _client.PostAsJsonAsync(Endpoints.PlansEndpoint, plan);
+
+        _navManager.NavigateTo("/plans/");
+
+    }
+
+}

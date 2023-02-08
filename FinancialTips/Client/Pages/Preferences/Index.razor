@@ -8,6 +8,13 @@
 
 <br />
 
+<a href="/preferences/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New preferences
+</a>
+<br />
+<br />
+
 @if (Preferences == null)
 {
     <div class="alert alert-info">Loading Preferences...</div>
@@ -18,13 +25,14 @@ else
         <thead>
             <tr>
                 <th>Investment Amount</th>
-                <th>Actions</th>
+
                 <th>Risk (in %)</th>
-                <th>Actions</th>
+
                 <th>Commitment Period</th>
-                <th>Actions</th>
+
                 <th>Average Income</th>
-                <th>Actions</th>
+
+                <th> Action</th>
             </tr>
         </thead>
         <tbody>
@@ -33,59 +41,8 @@ else
             {
                 <tr>
                     <td>@preference.InvestAmount</td>
-                    <td>
-                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-
-                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
-
-
-
-
-
                     <td>@preference.RiskMinMax</td>
-                    <td>
-                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-
-                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
-
-
-
-
                     <td>@preference.CommitmentPeriod</td>
-                    <td>
-                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-
-                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
-
-
-
-
-
-
                     <td>@preference.AverageIncome</td>
                     <td>
                         <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
