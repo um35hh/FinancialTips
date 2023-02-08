@@ -1,4 +1,6 @@
-﻿<EditForm Model="@instrument" OnValidSubmit="@OnValidSubmit">
+﻿@using FinancialTips.Client.Components
+
+<EditForm Model="@instrument" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-group">
@@ -15,8 +17,10 @@
     </div>
 
     <button type="submit" class="btn btn-success btn-block">
-        @ButtonText 
+        @ButtonText
     </button>
+
+    <BackToList Target="instruments" />
 
 </EditForm>
 
