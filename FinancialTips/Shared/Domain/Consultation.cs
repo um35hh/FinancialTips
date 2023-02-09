@@ -4,7 +4,7 @@ namespace FinancialTips.Shared.Domain
 {
     public class Consultation : BaseDomainModel
     {
-        public DateTime ConsultDate { get; set; }
+        public DateTime ConsultDate { get; set; } = DateTime.Now;
         public string ConsultReport { get; set; }
         public int? PlanId { get; set; }
         public virtual Plan Plan  { get; set; }

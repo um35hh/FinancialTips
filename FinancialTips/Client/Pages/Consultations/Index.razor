@@ -12,8 +12,6 @@
     Create New Consultation
 </a>
 
-
-
 @if (Consultations == null)
 {
 
@@ -34,22 +32,22 @@ else
         <tbody>
             @foreach (var consultation in Consultations)
             {
-            <tr>
-                <td>@consultation.ConsultReport</td>
-                <td>@consultation.ConsultDate </td>
-                <td>
-                    <a href="/consultations/view/@consultation.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
+                <tr>
+                    <td>@consultation.ConsultReport</td>
+                    <td>@consultation.ConsultDate </td>
+                    <td>
+                        <a href="/consultations/view/@consultation.Id" class="btn btn-primary">
+                            <span class="oi oi-book"></span>
+                        </a>
 
-                    <a href="/consultations/edit/@consultation.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>
+                        <a href="/consultations/edit/@consultation.Id" class="btn btn-warning">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
             }
         </tbody>
 
