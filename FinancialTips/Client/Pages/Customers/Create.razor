@@ -6,71 +6,8 @@
 <hr />
 <br />
 
-<EditForm Model="@customer" OnValidSubmit="CreateCustomer">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<FormComponent ButtonText="Create Customer" customer="customer" OnValidSubmit="@CreateCustomer" />
 
-    <div class="form-group">
-
-        <div class="form-group">
-
-            <label>Client Name: </label>
-            <div>
-                <InputText @bind-Value="customer.CustName" class="form-control" />
-                <ValidationMessage For="@(()=> customer.CustName)" />
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <div class="form-group">
-
-            <label>Client Age: </label>
-            <div>
-                <InputNumber @bind-Value="customer.CustAge" class="form-control" />
-                <ValidationMessage For="@(()=> customer.CustAge)" />
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <div class="form-group">
-
-            <label>Client Gender: </label>
-            <div>
-                <InputText @bind-Value="customer.CustGender" class="form-control" />
-                <ValidationMessage For="@(()=> customer.CustGender)" />
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <div class="form-group">
-
-            <label>Client Contact: </label>
-            <div>
-                <InputNumber @bind-Value="customer.CustContact" class="form-control" />
-                <ValidationMessage For="@(()=> customer.CustContact)" />
-            </div>
-        </div>
-
-    </div>
-
-
-    <button type="submit" class="btn btn-success btn-block">
-        Create Client
-    </button>
-
-</EditForm>
 
 @code {
 

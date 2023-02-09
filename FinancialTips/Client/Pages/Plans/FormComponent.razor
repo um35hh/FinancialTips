@@ -1,6 +1,6 @@
 ﻿@using FinancialTips.Client.Components
 
-<EditForm Model="@instrument" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@plan" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <fieldset disabled="@Disabled">
@@ -8,10 +8,10 @@
 
             <div class="form-group">
 
-                <label>Instrument Name</label>
+                <label>Plan Name</label>
                 <div>
-                    <InputText @bind-Value="instrument.InstrumentName" class="form-control" />
-                    <ValidationMessage For="@(()=> instrument.InstrumentName)" />
+                    <InputText @bind-Value="plan.PlanName" class="form-control" />
+                    <ValidationMessage For="@(()=> plan.PlanName)" />
                 </div>
             </div>
 
@@ -23,21 +23,21 @@
 
     </fieldset>
 
-        @if (!Disabled)
-        {
-            <button type="submit" class="btn btn-success btn-block">
-                @ButtonText
-            </button>
-        }
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
 
-        <BackToList Target="instruments" />
+    <BackToList Target="plans" />
 </EditForm>
 
 @code {
 
 
     [Parameter] public bool Disabled { get; set; } = false;
-    [Parameter] public Instrument instrument { get; set; }
+    [Parameter] public Plan plan { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Save";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
 

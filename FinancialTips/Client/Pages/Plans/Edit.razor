@@ -1,0 +1,27 @@
+﻿@page "/plans/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit Instrument </h3>
+
+<FormComponent ButtonText="Update" OnValidSubmit="EditInstrument" plan="plan" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    Plan plan = new Plan();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        plan = await _client.GetFromJsonAsync<Plan>($"{Endpoints.PlansEndpoint}/{id}");
+
+    }
+
+    async Task EditInstrument()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.PlansEndpoint}/{id}", plan);
+        _navManager.NavigateTo("/plans/");
+    }
+
+
+
+}

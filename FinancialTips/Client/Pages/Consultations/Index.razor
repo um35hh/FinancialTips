@@ -26,7 +26,7 @@ else
     <table class="table table-responsive">
         <thead>
             <tr>
-                <th>Customer Report</th>
+                <th>Customer </th>
                 <th>Consult Date</th>
                 <th>Actions</th>
             </tr>
@@ -38,11 +38,11 @@ else
                 <td>@consultation.ConsultReport</td>
                 <td>@consultation.ConsultDate </td>
                 <td>
-                    <a href="/Consultations/view/@consultation.Id" class="btn btn-primary">
+                    <a href="/consultations/view/@consultation.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
 
-                    <a href="/Consultations/edit/@consultation.Id" class="btn btn-warning">
+                    <a href="/consultations/edit/@consultation.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">

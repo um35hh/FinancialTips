@@ -39,11 +39,11 @@ else
                 <td>@plan.PlanName</td>
                 <td>@plan.PlanPeriod</td>
                 <td>
-                    <a href="/Plans/view/@plan.Id" class="btn btn-primary">
+                    <a href="/plans/view/@plan.Id" class="btn btn-primary">
                         <span class="oi oi-book"></span>
                     </a>
 
-                    <a href="/Plans/edit/@plan.Id" class="btn btn-warning">
+                    <a href="/plans/edit/@plan.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(()=>Delete(plan.Id))">
