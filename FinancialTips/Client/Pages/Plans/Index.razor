@@ -2,82 +2,97 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
+<body style="background-color: lightsalmon;">
 
-<center><h3 class="card-title">Financial Plans</h3></center>
-<center><img src="/Images/plan2.jpg" asp-append-version="true" width="100px" height="100px" /></center>
-<br />
+    <center><h3 class="card-title">Financial Plans</h3></center>
+    <center><img src="/Images/plan2.jpg" asp-append-version="true" width="100px" height="100px" /></center>
+    <br />
 
-<a href="/plans/create" class="btn btn-secondary">
-    <span class="oi oi-plus"></span>
-    Create New Plans
-</a>
-<br />
-<br />
+    <a href="/plans/create" class="btn btn-secondary">
+        <span class="oi oi-plus"></span>
+        Create New Plans
+    </a>
+    <br />
+    <br />
 
-@if (Plans == null)
-{
-
-    <div class="alert alert-info">Loading Plans...</div>
-
-}
-else
-
-{
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th>Plan Name</th>
-                <th>Plan Period</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var plan in Plans)
-            {
-            <tr>
-                <td>@plan.PlanName</td>
-                <td>@plan.PlanPeriod</td>
-                <td>
-                    <a href="/plans/view/@plan.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-
-                    <a href="/plans/edit/@plan.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(plan.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>               
-            }
-        </tbody>
-
-    </table>
-
-}
-
-
-
-@code {
-
-    private List<Plan> Plans;
-    protected async override Task OnInitializedAsync()
+    @if (Plans == null)
     {
-        Plans = await _client.GetFromJsonAsync<List<Plan>>($"{Endpoints.PlansEndpoint}");
+
+        <div class="alert alert-info">Loading Plans...</div>
+
     }
-    async Task Delete(int planId)
+    else
+
     {
-        var plan = Plans.First(q => q.Id == planId);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {plan.PlanName}?");
-        if (confirm)
+        <table class="table table-responsive" id="plansTable">
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Plan Period</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var plan in Plans)
+                {
+                    <tr>
+                        <td>@plan.PlanName</td>
+                        <td>@plan.PlanPeriod</td>
+                        <td>
+                            <a href="/plans/view/@plan.Id" class="btn btn-primary">
+                                <span class="oi oi-book"></span>
+                            </a>
+
+                            <a href="/plans/edit/@plan.Id" class="btn btn-warning">
+                                <span class="oi oi-pencil"></span>
+                            </a>
+                            <button class="btn btn-danger" @onclick="@(()=>Delete(plan.Id))">
+                                <span class="oi oi-delete"></span>
+                            </button>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+
+    }
+    </body>
+
+
+
+    @code {
+
+        private List<Plan> Plans;
+        protected async override Task OnInitializedAsync()
         {
-            await _client.DeleteAsync($"{Endpoints.PlansEndpoint}/{planId}");
-            await OnInitializedAsync();
+            Plans = await _client.GetFromJsonAsync<List<Plan>>($"{Endpoints.PlansEndpoint}");
+        }
+        async Task Delete(int planId)
+        {
+            var plan = Plans.First(q => q.Id == planId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {plan.PlanName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.PlansEndpoint}/{planId}");
+                await OnInitializedAsync();
+            }
+
         }
 
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            await js.InvokeVoidAsync("AddDataTable", "#plansTable");
+        }
+
+        public void Dispose()
+        {
+
+            js.InvokeVoidAsync("DataTablesDispose", "#plansTable");
+        }
+
+
     }
-
-
-}

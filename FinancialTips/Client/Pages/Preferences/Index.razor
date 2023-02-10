@@ -2,91 +2,105 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
+<body style="background-color: lightblue;">
 
-<center><h3 class="card-title">Customer Preference </h3></center>
+    <center><h3 class="card-title">Customer Preference </h3></center>
 
-<br />
+    <br />
 
-<a href="/preferences/create" class="btn btn-secondary">
-    <span class="oi oi-plus"></span>
-    Create New preferences
-</a>
-<br />
-<br />
+    <a href="/preferences/create" class="btn btn-secondary">
+        <span class="oi oi-plus"></span>
+        Create New preferences
+    </a>
+    <br />
+    <br />
 
-@if (Preferences == null)
-{
-    <div class="alert alert-info">Loading Preferences...</div>
-}
-else
-{
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th>Investment Amount</th>
-
-                <th>Risk (in %)</th>
-
-                <th>Commitment Period</th>
-
-                <th>Average Income</th>
-
-                <th> Action</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var preference in Preferences)
-            {
+    @if (Preferences == null)
+    {
+        <div class="alert alert-info">Loading Preferences...</div>
+    }
+    else
+    {
+        <table class="table table-responsive" id="preferencesTable">
+            <thead>
                 <tr>
-                    <td>@preference.InvestAmount</td>
-                    <td>@preference.RiskMinMax</td>
-                    <td>@preference.CommitmentPeriod</td>
-                    <td>@preference.AverageIncome</td>
-                    <td>
-                        <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
+                    <th>Investment Amount</th>
 
-                        <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
+                    <th>Risk (in %)</th>
 
+                    <th>Commitment Period</th>
 
+                    <th>Average Income</th>
+
+                    <th> Action</th>
                 </tr>
+            </thead>
+            <tbody>
 
+                @foreach (var preference in Preferences)
+                {
+                    <tr>
+                        <td>@preference.InvestAmount</td>
+                        <td>@preference.RiskMinMax</td>
+                        <td>@preference.CommitmentPeriod</td>
+                        <td>@preference.AverageIncome</td>
+                        <td>
+                            <a href="/Preferences/view/@preference.Id" class="btn btn-primary">
+                                <span class="oi oi-book"></span>
+                            </a>
+
+                            <a href="/Preferences/edit/@preference.Id" class="btn btn-warning">
+                                <span class="oi oi-pencil"></span>
+                            </a>
+                            <button class="btn btn-danger" @onclick="@(()=>Delete(preference.Id))">
+                                <span class="oi oi-delete"></span>
+                            </button>
+                        </td>
+
+
+                    </tr>
+
+                }
+
+
+            </tbody>
+
+        </table>
+
+    }
+
+
+    @code {
+
+        private List<Preference> Preferences;
+        protected async override Task OnInitializedAsync()
+        {
+            Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
+        }
+        async Task Delete(int preferenceId)
+        {
+            var preference = Preferences.First(q => q.Id == preferenceId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {preference.InvestAmount}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.PreferencesEndpoint}/{preferenceId}");
+                await OnInitializedAsync();
             }
 
+        }
 
-        </tbody>
-
-    </table>
-
-}
-
-
-@code {
-
-    private List<Preference> Preferences;
-    protected async override Task OnInitializedAsync()
-    {
-        Preferences = await _client.GetFromJsonAsync<List<Preference>>($"{Endpoints.PreferencesEndpoint}");
-    }
-    async Task Delete(int preferenceId)
-    {
-        var preference = Preferences.First(q => q.Id == preferenceId);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {preference.InvestAmount}?");
-        if (confirm)
+        protected async override Task OnAfterRenderAsync(bool firstRender)
         {
-            await _client.DeleteAsync($"{Endpoints.PreferencesEndpoint}/{preferenceId}");
-            await OnInitializedAsync();
+            await js.InvokeVoidAsync("AddDataTable", "#preferencesTable");
+        }
+
+        public void Dispose()
+        {
+
+            js.InvokeVoidAsync("DataTablesDispose", "#preferencesTable");
         }
 
     }
-
-}
+</body>

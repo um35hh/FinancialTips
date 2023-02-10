@@ -2,79 +2,99 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
-
-<center><h3 class="card-title">Financial consultations</h3></center>
-<center><img src="/Images/consult.jpg" asp-append-version="true" width="200px" height="100px" /></center>
-<br />
-
-<a href="/consultations/create" class="btn btn-secondary">
-    <span class="oi oi-plus"></span>
-    Create New Consultation
-</a>
-
-@if (Consultations == null)
-{
-
-    <div class="alert alert-info">Loading consultations...</div>
-
-}
-else
-
-{
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th>Customer </th>
-                <th>Consult Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var consultation in Consultations)
-            {
-                <tr>
-                    <td>@consultation.ConsultReport</td>
-                    <td>@consultation.ConsultDate </td>
-                    <td>
-                        <a href="/consultations/view/@consultation.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-
-                        <a href="/consultations/edit/@consultation.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-
-    </table>
+@implements IDisposable
 
 
-}
+    <body style="background-color: lightgreen;">
+        <center><h3 class="card-title">Financial consultations</h3></center>
+        <center><img src="/Images/consult.jpg" asp-append-version="true" width="200px" height="100px" /></center>
+        <br />
 
+        <a href="/consultations/create" class="btn btn-secondary">
+            <span class="oi oi-plus"></span>
+            Create New Consultation
+        </a>
 
-@code {
-
-    private List<Consultation> Consultations;
-    protected async override Task OnInitializedAsync()
-    {
-        Consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
-    }
-    async Task Delete(int consultationId)
-    {
-        var consultation = Consultations.First(q => q.Id == consultationId);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {consultation.ConsultDate}?");
-        if (confirm)
+        @if (Consultations == null)
         {
-            await _client.DeleteAsync($"{Endpoints.ConsultationsEndpoint}/{consultationId}");
-            await OnInitializedAsync();
+
+            <div class="alert alert-info">Loading consultations...</div>
+
         }
+        else
 
-    }
+        {
+            <table class="table table-responsive" id="consultationsTable">
+                <thead>
+                    <tr>
+
+                        <th>Client Name</th>
+                        <th>Consult Date&Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var consultation in Consultations)
+                    {
+                        <tr>
+
+                            <td>@consultation.ConsultReport</td>
+                            <td>@consultation.ConsultDate </td>
+                            <td>
+                                <a href="/consultations/view/@consultation.Id" class="btn btn-primary">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/consultations/edit/@consultation.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger" @onclick="@(()=>Delete(consultation.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
 
 
-}
+        }
+        </body>
+
+
+        @code {
+
+            private List<Consultation> Consultations;
+            protected async override Task OnInitializedAsync()
+            {
+                Consultations = await _client.GetFromJsonAsync<List<Consultation>>($"{Endpoints.ConsultationsEndpoint}");
+            }
+            async Task Delete(int consultationId)
+            {
+                var consultation = Consultations.First(q => q.Id == consultationId);
+                var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {consultation.ConsultDate}?");
+                if (confirm)
+                {
+                    await _client.DeleteAsync($"{Endpoints.ConsultationsEndpoint}/{consultationId}");
+                    await OnInitializedAsync();
+                }
+
+            }
+
+            protected async override Task OnAfterRenderAsync(bool firstRender)
+            {
+                await js.InvokeVoidAsync("AddDataTable", "#consultationsTable");
+            }
+
+            public void Dispose()
+            {
+
+                js.InvokeVoidAsync("DataTablesDispose", "#consultationsTable");
+            }
+
+
+
+
+
+        }

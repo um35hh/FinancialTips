@@ -2,78 +2,93 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
-<center><h3 class="card-title">Instrument Types</h3></center>
+    <body style="background-color: lightpink;">
 
-<br />
+        <center><h3 class="card-title">Instrument Types</h3></center>
 
-<a href="/instruments/create" class="btn btn-secondary">
-    <span class="oi oi-plus"></span>
-    Create New Instruments
-</a>
-<br />
-<br />
+        <br />
 
-
-@if (Instruments == null)
-{
-    <div class="alert alert-info">Loading Instruments...</div>
-}
-else
-{
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th>Instrument Name</th>
-                <th>Instrument Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var instrument in Instruments)
-            {
-                <tr>
-                    <td>@instrument.InstrumentName</td>
-                    <td>@instrument.InstrumentDescription</td>
-                    <td>
-                        <a href="/instruments/view/@instrument.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-
-                        <a href="/instruments/edit/@instrument.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(instrument.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-
-                    </td>
-                </tr>
-            }
-        </tbody>
-
-    </table>
-
-}
+        <a href="/instruments/create" class="btn btn-secondary">
+            <span class="oi oi-plus"></span>
+            Create New Instruments
+        </a>
+        <br />
+        <br />
 
 
-@code {
-
-    private List<Instrument> Instruments;
-    protected async override Task OnInitializedAsync()
-    {
-        Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
-    }
-    async Task Delete(int instrumentId)
-    {
-        var instrument = Instruments.First(q => q.Id == instrumentId);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {instrument.InstrumentName}?");
-        if (confirm)
+        @if (Instruments == null)
         {
-            await _client.DeleteAsync($"{Endpoints.InstrumentsEndpoint}/{instrumentId}");
-            await OnInitializedAsync();
+            <div class="alert alert-info">Loading Instruments...</div>
         }
+        else
+        {
+            <table class="table table-responsive" id="instrumentsTable">
+                <thead>
+                    <tr>
+                        <th>Instrument Name</th>
+                        <th>Instrument Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var instrument in Instruments)
+                    {
+                        <tr>
+                            <td>@instrument.InstrumentName</td>
+                            <td>@instrument.InstrumentDescription</td>
+                            <td>
+                                <a href="/instruments/view/@instrument.Id" class="btn btn-primary">
+                                    <span class="oi oi-book"></span>
+                                </a>
 
-    }
+                                <a href="/instruments/edit/@instrument.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger" @onclick="@(()=>Delete(instrument.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
 
-}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        }
+        </body>
+
+
+        @code {
+
+            private List<Instrument> Instruments;
+            protected async override Task OnInitializedAsync()
+            {
+                Instruments = await _client.GetFromJsonAsync<List<Instrument>>($"{Endpoints.InstrumentsEndpoint}");
+            }
+            async Task Delete(int instrumentId)
+            {
+                var instrument = Instruments.First(q => q.Id == instrumentId);
+                var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {instrument.InstrumentName}?");
+                if (confirm)
+                {
+                    await _client.DeleteAsync($"{Endpoints.InstrumentsEndpoint}/{instrumentId}");
+                    await OnInitializedAsync();
+                }
+
+            }
+
+            protected async override Task OnAfterRenderAsync(bool firstRender)
+            {
+                await js.InvokeVoidAsync("AddDataTable", "#instrumentsTable");
+            }
+
+            public void Dispose()
+            {
+
+                js.InvokeVoidAsync("DataTablesDispose", "#instrumentsTable");
+            }
+
+        }
